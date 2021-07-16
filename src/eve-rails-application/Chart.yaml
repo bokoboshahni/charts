@@ -1,0 +1,16 @@
+apiVersion: v2
+version: 1.0.0
+appVersion: v1.0.0
+type: application
+name: eve-rails-application
+description: An opinionated configuration of a third-party application built with Ruby on Rails for the EVE Online MMORPG.
+home: https://github.com/bokoboshahni/charts/src/eve-rails-application
+maintainers:
+  - email: shahni@bokobo.space
+    name: Bokobo Shahni
+keywords:
+  - eve-online
+  - rails
+  - ruby
+sources:
+  - https://github.com/bokoboshahni/src/eve-rails-application
