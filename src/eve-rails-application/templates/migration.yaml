@@ -37,11 +37,11 @@ spec:
             - name: RAILS_LOG_TO_STDOUT
               value: 'true'
             - name: RAILS_ENV
-              value: {{ .Values.rails_env }}
-          {{- if .Values.containerEnvSecret }}
+              value: {{ .Values.rails.environment }}
+          {{- if .Values.rails.envSecret }}
           envFrom:
             - secretRef:
-                name: {{ .Values.containerEnvSecret }}
+                name: {{ .Values.rails.envSecret }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

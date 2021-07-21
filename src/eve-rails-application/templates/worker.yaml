@@ -8,7 +8,7 @@ metadata:
     app: {{ include "eve-rails-application.fullname" . }}-worker
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.rails.worker.replicaCount }}
   {{- end }}
   {{- if .Values.revisionHistoryLimit }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
@@ -39,16 +39,18 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["bundle", "exec", "sidekiq", ]
+          command: ["bundle", "exec", "sidekiq", "-c", "{{ .Values.rails.worker.maxThreads }}", "-q", "{{ .Values.worker.queues }}"]
           env:
             - name: RAILS_LOG_TO_STDOUT
               value: 'true'
             - name: RAILS_ENV
-              value: {{ .Values.rails_env }}
-          {{- if .Values.containerEnvSecret }}
+              value: {{ .Values.rails.environment }}
+            - name: RAILS_MAX_THREADS
+              value: {{ .Values.rails.worker.maxThreads }}
+          {{- if .Values.rails.envSecret }}
           envFrom:
             - secretRef:
-                name: {{ .Values.containerEnvSecret }}
+                name: {{ .Values.rails.envSecret }}
           {{- end }}
           ports:
             - name: http
@@ -83,11 +85,11 @@ spec:
             - name: RAILS_LOG_TO_STDOUT
               value: 'true'
             - name: RAILS_ENV
-              value: {{ .Values.rails_env }}
-          {{- if .Values.containerEnvSecret }}
+              value: {{ .Values.rails.environment }}
+          {{- if .Values.rails.envSecret }}
           envFrom:
             - secretRef:
-                name: {{ .Values.containerEnvSecret }}
+                name: {{ .Values.rails.envSecret }}
           {{- end }}
           ports:
             - name: http
