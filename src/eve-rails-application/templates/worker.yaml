@@ -39,7 +39,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["bundle", "exec", "sidekiq", "-c", "{{ .Values.rails.worker.maxThreads }}"]
+          command: ["bundle", "exec", "sidekiq", "-c", "{{ .Values.rails.worker.maxThreads }}", "-C", "config/sidekiq.yml"]
           env:
             - name: RAILS_LOG_TO_STDOUT
               value: 'true'
