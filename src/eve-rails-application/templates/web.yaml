@@ -39,6 +39,8 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["bundle", "exec", "puma", "-C", "config/puma.rb"]
           env:
+            - name: RACK_ENV
+              value: {{ .Values.rails.environment }}
             - name: RAILS_LOG_TO_STDOUT
               value: 'true'
             - name: RAILS_ENV

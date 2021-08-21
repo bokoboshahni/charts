@@ -41,6 +41,8 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["bundle", "exec", "sidekiq", "-c", "{{ .Values.rails.worker.maxThreads }}", "-C", "config/sidekiq.yml"]
           env:
+            - name: RACK_ENV
+              value: {{ .Values.rails.environment }}
             - name: RAILS_LOG_TO_STDOUT
               value: 'true'
             - name: RAILS_ENV
