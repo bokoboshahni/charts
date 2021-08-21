@@ -1,0 +1,27 @@
+{{- if .Values.ambassador.enabled -}}
+{{- $fullName := include "eve-rails-application.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+{{- range .Values.ambassador.hosts -}}
+---
+apiVersion: getambassador.io/v2
+kind: Host
+metadata:
+  name: {{ .host | quote }}
+spec:
+  hostname: {{ .host | quote }}
+  acmeProvider:
+    authority: none
+  tlsSecret:
+    name: {{ .tlsSecret | quote }}
+{{- range .mappings -}}
+---
+apiVersion: getambassador.io/v2
+kind: Mapping
+metadata:
+  name: {{ $fullName }}-web
+spec:
+  host: {{ $.host | quote }}
+  prefix: {{ .prefix | quote }}
+  service: {{ $fullName }}-web:{{ $svcPort }}
+{{- end -}}
+{{- end -}}
