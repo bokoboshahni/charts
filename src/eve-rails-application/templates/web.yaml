@@ -44,9 +44,9 @@ spec:
             - name: RAILS_ENV
               value: {{ .Values.rails.environment }}
             - name: RAILS_MAX_THREADS
-              value: {{ .Values.rails.web.maxThreads }}
+              value: {{ .Values.rails.web.maxThreads | quote }}
             - name: WEB_CONCURRENCY
-              value: {{ .Values.rails.web.concurrency }}
+              value: {{ .Values.rails.web.concurrency | quote }}
           {{- if .Values.rails.envSecret }}
           envFrom:
             - secretRef:
