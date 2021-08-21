@@ -24,6 +24,27 @@ entries:
   eve-rails-application:
   - apiVersion: v2
     appVersion: v1.0.0
+    created: "2021-08-21T20:22:18.015133384Z"
+    description: An opinionated configuration of a third-party application built with
+      Ruby on Rails for the EVE Online MMORPG.
+    digest: 2f48023bb08a278daad8047d2446cb49ab8ab1eb1b204dd176640898aa731feb
+    home: https://github.com/bokoboshahni/charts/src/eve-rails-application
+    keywords:
+    - eve-online
+    - rails
+    - ruby
+    maintainers:
+    - email: shahni@bokobo.space
+      name: Bokobo Shahni
+    name: eve-rails-application
+    sources:
+    - https://github.com/bokoboshahni/src/eve-rails-application
+    type: application
+    urls:
+    - https://github.com/bokoboshahni/charts/releases/download/eve-rails-application-1.2.0/eve-rails-application-1.2.0.tgz
+    version: 1.2.0
+  - apiVersion: v2
+    appVersion: v1.0.0
     created: "2021-07-21T21:26:05.327949352Z"
     description: An opinionated configuration of a third-party application built with
       Ruby on Rails for the EVE Online MMORPG.
@@ -147,4 +168,4 @@ entries:
     urls:
     - https://github.com/bokoboshahni/charts/releases/download/idlehands-1.0.0/idlehands-1.0.0.tgz
     version: 1.0.0
-generated: "2021-07-21T21:26:05.327963652Z"
+generated: "2021-08-21T20:22:18.015430184Z"
