@@ -1,7 +1,6 @@
 {{- range $worker := .Values.rails.workers }}
 {{- $fullName := include "eve-rails-application.fullname" $ -}}
 {{- with $ -}}
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -115,5 +114,6 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+---
 {{- end }}
 {{- end }}
