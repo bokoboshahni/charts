@@ -47,10 +47,11 @@ rails:
     concurrency: 2
     maxThreads: 5
     replicaCount: 1
-  worker:
-    maxThreads: 25
-    queues: ""
-    replicaCount: 1
+  workers:
+    - name: default
+      queues: []
+      replicaCount: 1
+      maxThreads: 25
 
 revisionHistoryLimit: 1
 

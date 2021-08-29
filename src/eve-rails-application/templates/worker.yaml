@@ -1,21 +1,25 @@
+{{- range .Values.rails.workers }}
+{{- $worker := . -}}
+{{- $fullName := include "eve-rails-application.fullname" $ -}}
+{{- with $ -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "eve-rails-application.fullname" . }}-worker
+  name: {{ $fullName }}-worker-{{ $worker.name }}
   labels:
-    {{- include "eve-rails-application.labels" . | nindent 4 }}
-    app: {{ include "eve-rails-application.fullname" . }}-worker
+    {{- include "eve-rails-application.labels" $ | nindent 4 }}
+    app: {{ $fullName }}-worker-{{ $worker.name }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.rails.worker.replicaCount }}
+  replicas: {{ $worker.replicaCount }}
   {{- end }}
   {{- if .Values.revisionHistoryLimit }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   {{- end }}
   selector:
     matchLabels:
-      app: {{ include "eve-rails-application.fullname" . }}-worker
+      app: {{ $fullName }}-worker-{{ $worker.name }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -23,23 +27,23 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "eve-rails-application.selectorLabels" . | nindent 8 }}
-        app: {{ include "eve-rails-application.fullname" . }}-worker
+        {{- include "eve-rails-application.selectorLabels" $ | nindent 8 }}
+        app: {{ $fullName }}-worker-{{ $worker.name }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "eve-rails-application.serviceAccountName" . }}
+      serviceAccountName: {{ include "eve-rails-application.serviceAccountName" $ }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ include "eve-rails-application.fullname" . }}-worker
+        - name: {{ $fullName }}-worker-{{ $worker.name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["bundle", "exec", "sidekiq", "-c", "{{ .Values.rails.worker.maxThreads }}", "-C", "config/sidekiq.yml"]
+          command: ["bundle", "exec", "sidekiq", {{- range $worker.queues }}-q {{ . }}, {{- end }}"-c", "{{ $worker.maxThreads }}", "-C", "config/sidekiq.yml"]
           env:
             - name: RACK_ENV
               value: {{ .Values.rails.environment }}
@@ -48,7 +52,7 @@ spec:
             - name: RAILS_ENV
               value: {{ .Values.rails.environment }}
             - name: RAILS_MAX_THREADS
-              value: {{ .Values.rails.web.maxThreads | quote }}
+              value: {{ $worker.maxThreads | quote }}
           {{- if .Values.rails.envSecret }}
           envFrom:
             - secretRef:
@@ -77,7 +81,7 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       initContainers:
-        - name: {{ include "eve-rails-application.fullname" . }}-worker-init
+        - name: {{ $fullName }}-worker-{{ $worker.name }}-init
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -112,3 +116,5 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}
+{{- end }}
