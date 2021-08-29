@@ -1,5 +1,4 @@
-{{- range .Values.rails.workers }}
-{{- $worker := . -}}
+{{- range $worker := .Values.rails.workers }}
 {{- $fullName := include "eve-rails-application.fullname" $ -}}
 {{- with $ -}}
 ---
